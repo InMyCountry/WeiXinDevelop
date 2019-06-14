@@ -21,6 +21,7 @@ namespace WeiXinDevelopDemo.Controllers
         }
         public IActionResult Index()
         {
+            ViewData["redirectUrl"] = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx272fd0eccf8fb594&redirect_uri={_options.RedirectUri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
             return View();
         }
 

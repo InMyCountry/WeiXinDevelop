@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WeiXinDevelopDemo.ApiModel;
 using WeiXinDevelopDemo.ApiServer;
 using WeiXinDevelopDemo.Models;
+using WeiXinDevelopDemo.Options;
 
 namespace WeiXinDevelopDemo.Controllers
 {
@@ -16,10 +19,12 @@ namespace WeiXinDevelopDemo.Controllers
     {
         private ILogger<WeiXinWebController> _logger;
         private IWeiXinApi _IweiXinApi ;
-        public WeiXinWebController(ILogger<WeiXinWebController> logger, IWeiXinApi IweiXinApi)
+        private readonly WeiXinDevelopOption _option;
+        public WeiXinWebController(ILogger<WeiXinWebController> logger, IWeiXinApi IweiXinApi, IOptionsSnapshot<WeiXinDevelopOption> option)
         {
             _logger = logger;
             _IweiXinApi = IweiXinApi;
+            _option = option.Value;
         }
         /// <summary>
         /// 微信官方文档;https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421135319
@@ -84,13 +89,54 @@ namespace WeiXinDevelopDemo.Controllers
             string ips = _IweiXinApi.GetCodeAuthorize(appId,redirectUri,responseType,scope,state);
        
         }
-        public void RedirectPage(string code = "",string state="")
+        public ActionResult RedirectPage(string code = "",string state="")
         {
             string appId = "wx272fd0eccf8fb594";
             string secretKey = "5794fed4d5db64f78b0be997d1bb6b99";
             //第一步获取Code
           var info=  _IweiXinApi.GetAccessTokenByCode(appId, secretKey, code, "");
+            string webToken = HttpContext.Session.GetString("webToken");
+            string Openid = HttpContext.Session.GetString("Openid");
+            if (string.IsNullOrWhiteSpace(webToken)||string.IsNullOrWhiteSpace(Openid))
+            {
+                AccessTokenWeb accessTokenWeb = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessTokenWeb>(info);
+                if (!string.IsNullOrWhiteSpace(accessTokenWeb.AccessToken))
+                {
+                    HttpContext.Session.SetString("webToken", accessTokenWeb.AccessToken);
+
+                }
+                if (!string.IsNullOrWhiteSpace(accessTokenWeb.Openid))
+                {
+                    HttpContext.Session.SetString("Openid", accessTokenWeb.Openid);
+                }
+            }
+        return     Redirect("../Home/Index");
         }
-        
+        public string GetCustomMenu()
+        {
+            string token = GetAccessToken();
+            var info = _IweiXinApi.GetCustomMenu(token);
+            return info;
+        }
+        public string CreateCustomMenu(string menuInfo)
+        {
+           
+            string token = GetAccessToken();
+            var info = _IweiXinApi.CreateCustomMenu(token, menuInfo);
+       
+            return info;
+        }
+
+        public string GetUserInfo()
+        {
+            string webToken = HttpContext.Session.GetString("webToken");
+             webToken = "22_MJBax-CeFWThD9JlSnaZeMaSwv6wGdeSjr6BrR0Q0mfLObMohgSTV2gAU2kvNq4CzUC5C4BNTqvC2AIzXCRekL08jZgFIR5ADXhaMULAPH8";
+            string openid = HttpContext.Session.GetString("Openid");
+             openid = "oQ9UN6POP4lSv9rDgaEgmggYdHd8";
+            var info = _IweiXinApi.GetUserInfo(webToken, openid,"");
+
+            return info;
+        }
+
     }
 }

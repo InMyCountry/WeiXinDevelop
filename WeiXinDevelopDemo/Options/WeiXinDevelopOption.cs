@@ -8,5 +8,9 @@ namespace WeiXinDevelopDemo.Options
     public class WeiXinDevelopOption
     {
         public string RedirectUri { get; set; }
+        public string appId  { get ; set ; }
+        public string SecretKey { get; set; }
+
+
     }
 }

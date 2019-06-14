@@ -43,7 +43,7 @@ namespace WeiXinDevelopDemo.ApiServer
         /// <param name="platformAccessToken">平台授权码</param>
         /// <param name="body">json菜单信息</param>
         /// <returns></returns>
-        string CustomMenuCreate(string platformAccessToken,string body);
+        string CreateCustomMenu(string platformAccessToken,string body);
 
         /// <summary>
         /// get
@@ -75,6 +75,14 @@ namespace WeiXinDevelopDemo.ApiServer
         /// <param name="grantType"></param>
         /// <returns></returns>
         string GetAccessTokenByCode(string appId, string secret, string code, string grantType);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="accessToken">网页授权码</param>
+        /// <param name="Openid">用户的唯一标识</param>
+        /// <param name="lang">返回国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语</param>
+        /// <returns></returns>
+        string GetUserInfo(string accessToken, string Openid, string lang);
         #endregion
 
     }

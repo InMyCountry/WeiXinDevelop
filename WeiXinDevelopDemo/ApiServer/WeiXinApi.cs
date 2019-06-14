@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace WeiXinDevelopDemo.ApiServer
@@ -28,14 +31,17 @@ namespace WeiXinDevelopDemo.ApiServer
             return sss;
         }
 
-        public string CustomMenuCreate(string platformAccessToken, string body)
+        public string CreateCustomMenu(string platformAccessToken, string body)
         {
-            throw new NotImplementedException();
+
+          var info=  HttpClinetHelp.PostResponse($"https://api.weixin.qq.com/cgi-bin/menu/create?access_token={platformAccessToken}", body);
+            return info;
         }
 
         public string GetCustomMenu(string platformAccessToken)
         {
-            throw new NotImplementedException();
+            HttpClient httpClient = new HttpClient();
+          return   httpClient.GetStringAsync($"https://api.weixin.qq.com/cgi-bin/menu/get?access_token={platformAccessToken}").Result;
         }
 
         public string GetCodeAuthorize(string appid, string redirect_uri, string response_type, string scope, string state)
@@ -52,6 +58,13 @@ namespace WeiXinDevelopDemo.ApiServer
             HttpClient httpClient = new HttpClient();
             string info = httpClient.GetStringAsync(url).Result;
             return info;
+        }
+
+        public string GetUserInfo(string accessToken, string Openid, string lang= "zh_CN")
+        {
+            string url = $"https://api.weixin.qq.com/sns/userinfo?access_token={accessToken}&openid={Openid}&lang=zh_CN";
+           string str= HttpClinetHelp.GetResponse(url);
+            return str;
         }
     }
 }

@@ -3,30 +3,83 @@
 }
 
 <script>
-    function getcode() {
-
+        function getcustommenu() {
         $.ajax({
-                url: "../WeiXinWeb/GetCode",
+                url: "../WeiXinWeb/GetCustomMenu",
                 type: 'get',
-                dataType: 'JSON',
+                dataType: 'text',
                 //data: { City: "@ViewData["city"]" },
             success: function (data) {
-                alert(1);
-
+                $("#info").html(data);
                 },
                 error: function () {
-                    alert(0);
                 }
             })
+    }
+      function createcustommenu() {
+        $.ajax({
+                url: "../WeiXinWeb/CreateCustomMenu",
+                type: 'get',
+                dataType: 'json',
+                data: { menuInfo: $("#info").val() },
+            success: function (data) {
+                $("#info").html(data);
+                },
+                error: function () {
+                }
+            })
+    }
 
+       function getpatformaccesstoken() {
+        $.ajax({
+                url: "../WeiXinWeb/GetAccessToken",
+                type: 'get',
+                dataType: 'text',
+              //  data: { menuInfo: $("#") },
+            success: function (data) {
+                $("#info").html(data);
+                },
+                error: function () {
+                }
+            })
+    }
+
+    function getUserInfo() {
+        $.ajax({
+                url: "../WeiXinWeb/GetUserInfo",
+                type: 'get',
+                dataType: 'text',
+                //data: { City: "@ViewData["info"]" },
+            success: function (data) {
+        
+                  $("#info").html(data);
+                },
+                error: function () {
+                }
+            })
     }
 
 </script>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <button onclick="getcode()"> sssssssssssssssssssssssssssss</button>
-    @ViewData["url"]
-    <a href="@ViewData["url"]">这是一个授权code</a>
-    <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx272fd0eccf8fb594&redirect_uri=http://4fb9k4.natappfree.cc/WeiXinWeb/RedirectPage&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">这是一个授权code测试2</a>
+    <button onclick="getpatformaccesstoken()">获取平台授权码</button></br>
+    <button onclick="getcustommenu()">获取自定义菜单</button></br>
+    <button onclick="createcustommenu()">创建自定义菜单</button></br></br>
+
+    <a href="@ViewData["redirectUrl"]">只能在微信打开</a></br>
+
+    <button onclick="getUserInfo()">获取用户信息</button></br>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+    <ul class="navbar-nav flex-grow-1">
+
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </li>
+    </ul>
+</div>
+<textarea rows="5" id="info" style=" width:100%"></textarea>
