@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WeiXinDevelopDemo.ApiServer;
 using Microsoft.Extensions.Caching.SqlServer;
+using WeiXinDevelopDemo.Options;
+
 namespace WeiXinDevelopDemo
 {
     public class Startup
@@ -43,6 +45,7 @@ namespace WeiXinDevelopDemo
             });
             //注册session 服务
             services.AddSession();
+            services.Configure<WeiXinDevelopOption>( Configuration.GetSection("WeiXinDevelopOption"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

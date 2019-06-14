@@ -24,6 +24,9 @@
 </script>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-<button onclick="getcode()"> sssssssssssssssssssssssssssss</button>
+    <button onclick="getcode()"> sssssssssssssssssssssssssssss</button>
+    @ViewData["url"]
+    <a href="@ViewData["url"]">这是一个授权code</a>
+    <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx272fd0eccf8fb594&redirect_uri=http://4fb9k4.natappfree.cc/WeiXinWeb/RedirectPage&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">这是一个授权code测试2</a>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

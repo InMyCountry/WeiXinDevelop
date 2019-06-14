@@ -50,7 +50,7 @@ namespace WeiXinDevelopDemo.Controllers
                 string appId = "wx272fd0eccf8fb594";
                 string secretKey = "5794fed4d5db64f78b0be997d1bb6b99";
                 string grant_type = "client_credential";
-                var resultStr = _IweiXinApi.access_token(grant_type, appId, secretKey);
+                var resultStr = _IweiXinApi.GetPlatformAccessToken(grant_type, appId, secretKey);
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(resultStr);
                 string token = obj.access_token;
                 HttpContext.Session.SetString("accessToken", token);
@@ -71,28 +71,26 @@ namespace WeiXinDevelopDemo.Controllers
         public string GetWxServerIp()
         {
             string accessToken = GetAccessToken();
-           string ips= _IweiXinApi.getcallbackip(accessToken);
+           string ips= _IweiXinApi.GetCallBackIp(accessToken);
             return ips;
         }
         public void GetCode()
         {
             string appId = "wx272fd0eccf8fb594";
-            string redirectUri = "http://85mvg8.natappfree.cc/WeiXinWeb/RedirectPage";
+            string redirectUri = "http://4fb9k4.natappfree.cc/WeiXinWeb/RedirectPage";
             string responseType = "code";
             string scope = "snsapi_userinfo";
             string state = "1001";
-            string ips = _IweiXinApi.authorize(appId,redirectUri,responseType,scope,state);
+            string ips = _IweiXinApi.GetCodeAuthorize(appId,redirectUri,responseType,scope,state);
        
         }
         public void RedirectPage(string code = "",string state="")
         {
-            
+            string appId = "wx272fd0eccf8fb594";
+            string secretKey = "5794fed4d5db64f78b0be997d1bb6b99";
+            //第一步获取Code
+          var info=  _IweiXinApi.GetAccessTokenByCode(appId, secretKey, code, "");
         }
-        //[HttpGet]
-        //public ActionResult Callback()
-        //{
-        //    var code = Request.QueryString.Get("code");
-        //    return new RedirectResult(redirect_url, true);
-        //}
+        
     }
 }
